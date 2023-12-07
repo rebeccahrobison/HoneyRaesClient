@@ -10,6 +10,8 @@ function App() {
           <NavbarBrand href="/">Honey Rae's</NavbarBrand>
           <NavItem>
             <NavLink href="/tickets">Service Tickets</NavLink>
+            <NavLink href ="/customers">Customers</NavLink>
+            <NavLink href="/employees">Employees</NavLink>
           </NavItem>
         </Nav>
       </Navbar>
