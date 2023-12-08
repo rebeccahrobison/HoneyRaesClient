@@ -1,48 +1,75 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import { Form, Input, Label } from "reactstrap";
+import { Button, Form, Input, Label } from "reactstrap";
 import { getCustomers } from "../../data/customersData";
+import { postTicket } from "../../data/serviceTicketsData";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateTicket() {
   const [ticket, setTicket] = useState({description: "", emergency: false})
   const [customers, setCustomers] = useState([])
 
+  const navigate = useNavigate();
 
   useEffect(() => {
     getCustomers().then(arr => setCustomers(arr))
   }, 
   [])
 
-  const handleChange = (e) => {
-    const ticketCopy = {...ticket}
-    ticket[e.target.name] = e.target.value
-    setTicket(ticketCopy)
+  const handleSubmitBtn = (e) => {
+    e.preventDefault();
+    console.log("button clicked")
+
+    if (ticket.description && ticket.customerId) {
+      postTicket(ticket).then(() => {
+        navigate("/tickets")
+      })
+    } else {
+      window.alert("Please fill out all fields")
+    }
   }
-  //TODO add names properties to form elements
 
   return (
   <Form>
     <h3>Submit a Ticket</h3>
     <div className="form-group">
       <Label>Description of problem</Label>
-      <Input/>
+      <Input onChange={(e) => {
+        const ticketCopy = {...ticket}
+        ticketCopy.description = e.target.value
+        setTicket(ticketCopy)
+      }}
+      />
     </div>
     <div className="form-group">
       <Label>Emergency:</Label>
-      <Input type="checkbox"/>
+      <Input type="checkbox"
+        onChange={(e) => {
+          const ticketCopy = {...ticket}
+          ticketCopy.emergency = e.target.checked
+          setTicket(ticketCopy)
+        }}/>
     </div>
     <div className="form-group">
-      <Input type="select">
+      <Input 
+        type="select"
+        onChange={(e) => {
+          const ticketCopy = {...ticket}
+          ticketCopy.customerId = parseInt(e.target.value)
+          setTicket(ticketCopy)
+        }}
+      >
         <option>Choose Customer Name . . .</option>
         {customers.map(c => {
           return (
-            <option key={c.id}>{c.name}</option>
+            <option value={c.id} key={c.id}>{c.name}</option>
           )
         })}
       </Input>
     </div>
+    <Button onClick={handleSubmitBtn}>Submit Ticket</Button>
     
-  </Form>);
+  </Form>
+  );
 }
 
 //customer, description, emergency

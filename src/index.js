@@ -12,6 +12,7 @@ import { Customers } from './customers/Customers';
 import { CustomerDetails } from './customers/CustomerDetails';
 import { Employees } from './components/employees/Employees';
 import { EmployeeDetails } from './components/employees/EmployeeDetails';
+import { AssignTicket } from './components/tickets/AssignTicket';
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -23,6 +24,7 @@ root.render(
             <Route index element={<TicketsList />} />
             <Route path=":id" element={<TicketDetails />} />
             <Route path="create" element={<CreateTicket />} />
+            <Route path=":id/assign" element={<AssignTicket />} />
           </Route>
           <Route path="customers">
             <Route index element={<Customers />} />
